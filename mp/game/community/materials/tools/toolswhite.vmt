@@ -1,0 +1,5 @@
+unlitGeneric
+{
+$basetexture "tools\toolswhite"
+"%keywords" "sdk"	
+}

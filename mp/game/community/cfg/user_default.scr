@@ -97,6 +97,13 @@ DESCRIPTION INFO_OPTIONS
 		{ "1" }
 	}
 	
+	"cl_c4dynamiclight"
+	{
+		"#Cstrike_C4Dlight"
+		{ BOOL }
+		{ "1" }
+	}
+	
 	"hud_takesshots"
 	{
 		"#game_takesshots"
@@ -104,24 +111,24 @@ DESCRIPTION INFO_OPTIONS
 		{ "0" }
 	}	
 	
-	"cl_disablefreezecam"
-	{
-		"#Cstrike_Disable_Freeze_Cam"
-		{ BOOL }
-		{ "0" }
-	}
+	//"cl_disablefreezecam"
+	//{
+	//	"#Cstrike_Disable_Freeze_Cam"
+	//	{ BOOL }
+	//	{ "0" }
+	//}
 	
 	"cl_disablehtmlmotd"
 	{
 		"#Valve_DisableHTMLMOTD"
 		{ BOOL }
 		{ "0" }
-	}	
+	}
 	
-	"cl_cloud_settings"
-	{
-		"#Valve_UseSteamCloud"
-		{ BOOL }
-		{ "1" }
-	}	
+	//"cl_cloud_settings"
+	//{
+	//	"#Valve_UseSteamCloud"
+	//	{ BOOL }
+	//	{ "1" }
+	//}
 }

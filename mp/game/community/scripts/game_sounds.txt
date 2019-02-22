@@ -87,6 +87,20 @@
 	"wave"	"common/talk.wav"
 }
 
+"MouseMenu.abort"
+{
+	"channel"		"CHAN_ITEM"
+	"soundlevel"		"SNDLVL_NORM"
+	"wave"		"UI/buttonclickrelease.wav"
+}
+
+"MouseMenu.rollover"
+{
+	"channel"		"CHAN_ITEM"
+	"soundlevel"		"SNDLVL_NORM"
+	"wave"		"UI/buttonrollover.wav"
+}
+
 "Bot.Stuck1"
 {					
 	"channel"		"CHAN_ITEM"

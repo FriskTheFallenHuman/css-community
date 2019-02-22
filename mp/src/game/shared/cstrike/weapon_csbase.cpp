@@ -15,10 +15,7 @@
 
 #if defined( CLIENT_DLL )
 
-	#include "vgui/ISurface.h"
-	#include "vgui_controls/controls.h"
 	#include "c_cs_player.h"
-	#include "hud_crosshair.h"
 	#include "c_te_effect_dispatch.h"
 	#include "c_te_legacytempents.h"
 
@@ -303,15 +300,6 @@ LINK_ENTITY_TO_CLASS( weapon_cs_base, CWeaponCSBase );
 
 #endif
 
-#ifdef CLIENT_DLL
-	ConVar cl_crosshaircolor( "cl_crosshaircolor", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE );
-	ConVar cl_dynamiccrosshair( "cl_dynamiccrosshair", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE );
-	ConVar cl_scalecrosshair( "cl_scalecrosshair", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE );
-	ConVar cl_crosshairscale( "cl_crosshairscale", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE );
-	ConVar cl_crosshairalpha( "cl_crosshairalpha", "200", FCVAR_CLIENTDLL | FCVAR_ARCHIVE );
-	ConVar cl_crosshairusealpha( "cl_crosshairusealpha", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE );
-#endif
-
 // must be included after the above macros
 #ifndef CLIENT_DLL
 	#include "cs_bot.h"
@@ -330,8 +318,6 @@ CWeaponCSBase::CWeaponCSBase()
 	AddSolidFlags( FSOLID_TRIGGER ); // Nothing collides with these but it gets touches.
 
 #ifdef CLIENT_DLL
-	m_iCrosshairTextureID = 0;
-
 	m_bInReloadAnimation = false;
 #else
 	m_iDefaultExtraAmmo = 0;
@@ -872,184 +858,6 @@ void CWeaponCSBase::DefaultTouch(CBaseEntity *pOther)
 }
 
 #ifdef CLIENT_DLL
-
-	//-----------------------------------------------------------------------------
-	// Purpose: Draw the weapon's crosshair
-	//-----------------------------------------------------------------------------
-	void CWeaponCSBase::DrawCrosshair()
-	{
-		if ( !crosshair.GetInt() )
-			return;
-
-		CHudCrosshair *pCrosshair = GET_HUDELEMENT( CHudCrosshair );
-
-		if ( !pCrosshair )
-			return;
-
-		// clear crosshair
-		pCrosshair->SetCrosshair( 0, Color( 255, 255, 255, 255 ) );
-
-		CCSPlayer* pPlayer = (CCSPlayer*)C_BasePlayer::GetLocalPlayer();
-
-		if ( !pPlayer )
-			return;
-
-		// localplayer must be owner if not in Spec mode
-		Assert( (pPlayer == GetPlayerOwner()) || ( pPlayer->GetObserverMode()==OBS_MODE_IN_EYE) );
-
-		// Draw the targeting zone around the pCrosshair
-		if ( pPlayer->IsInVGuiInputMode() )
-			return;
-
-		if ( pPlayer->HasShield() && pPlayer->IsShieldDrawn() == true )
-			 return;
-
-		// no crosshair for sniper rifles
-		if ( GetCSWpnData().m_WeaponType == WEAPONTYPE_SNIPER_RIFLE )
-			 return;
-
-		int iDistance = GetCSWpnData().m_iCrosshairMinDistance; // The minimum distance the crosshair can achieve...
-
-		int iDeltaDistance = GetCSWpnData().m_iCrosshairDeltaDistance; // Distance at which the crosshair shrinks at each step
-
-		if ( cl_dynamiccrosshair.GetBool() )
-		{
-			if ( !( pPlayer->GetFlags() & FL_ONGROUND ) )
-				 iDistance *= 2.0f;
-			else if ( pPlayer->GetFlags() & FL_DUCKING )
-				 iDistance *= 0.5f;
-			else if ( pPlayer->GetAbsVelocity().Length() > 100 )
-				 iDistance *= 1.5f;
-		}
-
-		if ( pPlayer->m_iShotsFired > m_iAmmoLastCheck )
-		{
-			m_flCrosshairDistance = min( 15.f, m_flCrosshairDistance + iDeltaDistance );
-		}
-		else if( m_flCrosshairDistance > iDistance )
-		{
-			m_flCrosshairDistance -= 0.1f + m_flCrosshairDistance * 0.013;
-		}
-
-		m_iAmmoLastCheck = pPlayer->m_iShotsFired;
-
-		if ( m_flCrosshairDistance < iDistance )
-			 m_flCrosshairDistance = iDistance;
-
-		//scale bar size to the resolution
-		int crosshairScale = cl_crosshairscale.GetInt();
-		if ( crosshairScale < 1 )
-		{
-			if ( ScreenHeight() <= 600 )
-			{
-				crosshairScale = 600;
-			}
-			else if ( ScreenHeight() <= 768 )
-			{
-				crosshairScale = 768;
-			}
-			else
-			{
-				crosshairScale = 1200;
-			}
-		}
-
-		float scale;
-		if( cl_scalecrosshair.GetBool() == false )
-		{
-			scale = 1.0f;
-		}
-		else
-		{
-			scale = (float)ScreenHeight() / (float)crosshairScale;
-		}
-
-		int iCrosshairDistance = (int)ceil( m_flCrosshairDistance * scale );
-
-		int iBarSize = XRES(5) + (iCrosshairDistance - iDistance) / 2;
-
-		iBarSize = max( 1, (int)( (float)iBarSize * scale ) );
-
-		int iBarThickness = max( 1, (int)floor( scale + 0.5f ) );
-
-		int	r, g, b;
-
-		switch ( cl_crosshaircolor.GetInt() )
-		{
-			case 0 :	r = 50;		g = 250;	b = 50;		break;
-			case 1 :	r = 250;	g = 50;		b = 50;		break;
-			case 2 :	r = 50;		g = 50;		b = 250;	break;
-			case 3 :	r = 250;	g = 250;	b = 50;		break;
-			case 4 :	r = 50;		g = 250;	b = 250;	break;
-			default :	r = 50;		g = 250;	b = 50;		break;
-		}
-
-		// if user is using nightvision, make the crosshair red.
-		if (pPlayer->m_bNightVisionOn)
-		{
-			r = 250;
-			g = 50;
-			b = 50;
-		}
-
-		int alpha = clamp( cl_crosshairalpha.GetInt(), 0, 255 );
-		vgui::surface()->DrawSetColor( r, g, b, alpha );
-
-		if ( !m_iCrosshairTextureID )
-		{
-			CHudTexture *pTexture = gHUD.GetIcon( "whiteAdditive" );
-			if ( pTexture )
-			{
-				m_iCrosshairTextureID = pTexture->textureId;
-			}
-		}
-
-		if ( !cl_crosshairusealpha.GetBool() )
-		{
-			vgui::surface()->DrawSetColor( r, g, b, 200 );
-			vgui::surface()->DrawSetTexture( m_iCrosshairTextureID );
-		}
-
-		int iHalfScreenWidth = ScreenWidth() / 2;
-		int iHalfScreenHeight = ScreenHeight() / 2;
-
-		int iLeft		= iHalfScreenWidth - ( iCrosshairDistance + iBarSize );
-		int iRight		= iHalfScreenWidth + iCrosshairDistance + iBarThickness;
-		int iFarLeft	= iLeft + iBarSize;
-		int iFarRight	= iRight + iBarSize;
-
-		if ( !cl_crosshairusealpha.GetBool() && !pPlayer->m_bNightVisionOn)
-		{
-			// Additive crosshair
-			vgui::surface()->DrawTexturedRect( iLeft, iHalfScreenHeight, iFarLeft, iHalfScreenHeight + iBarThickness );
-			vgui::surface()->DrawTexturedRect( iRight, iHalfScreenHeight, iFarRight, iHalfScreenHeight + iBarThickness );
-		}
-		else
-		{
-			// Alpha-blended crosshair
-			vgui::surface()->DrawFilledRect( iLeft, iHalfScreenHeight, iFarLeft, iHalfScreenHeight + iBarThickness );
-			vgui::surface()->DrawFilledRect( iRight, iHalfScreenHeight, iFarRight, iHalfScreenHeight + iBarThickness );
-		}
-
-		int iTop		= iHalfScreenHeight - ( iCrosshairDistance + iBarSize );
-		int iBottom		= iHalfScreenHeight + iCrosshairDistance + iBarThickness;
-		int iFarTop		= iTop + iBarSize;
-		int iFarBottom	= iBottom + iBarSize;
-
-		if ( !cl_crosshairusealpha.GetBool() && !pPlayer->m_bNightVisionOn)
-		{
-			// Additive crosshair
-			vgui::surface()->DrawTexturedRect( iHalfScreenWidth, iTop, iHalfScreenWidth + iBarThickness, iFarTop );
-			vgui::surface()->DrawTexturedRect( iHalfScreenWidth, iBottom, iHalfScreenWidth + iBarThickness, iFarBottom );
-		}
-		else
-		{
-			// Alpha-blended crosshair
-			vgui::surface()->DrawFilledRect( iHalfScreenWidth, iTop, iHalfScreenWidth + iBarThickness, iFarTop );
-			vgui::surface()->DrawFilledRect( iHalfScreenWidth, iBottom, iHalfScreenWidth + iBarThickness, iFarBottom );
-		}
-	}
-
 
 	void CWeaponCSBase::OnDataChanged( DataUpdateType_t type )
 	{

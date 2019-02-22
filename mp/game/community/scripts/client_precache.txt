@@ -1,0 +1,11 @@
+ClientPrecache
+{
+	// Materials used by the client effects
+	"model"	"sprites/white.vmt"
+	"model"	"sprites/physbeam.vmt"
+
+	// Legacy temp ents sounds
+	"scriptsound"	"Bounce.PistolShell"
+	"scriptsound"	"Bounce.RifleShell"
+	"scriptsound"	"Bounce.ShotgunShell"
+}

@@ -1,0 +1,7 @@
+UnlitGeneric
+{
+$basetexture "Tools/toolsblack"
+"%noportal" 1
+"%keywords" "sdk, portal"
+$nofog 1
+}

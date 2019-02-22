@@ -147,17 +147,14 @@ public:
 		virtual void	ProcessMuzzleFlashEvent();
 		virtual bool	OnFireEvent( C_BaseViewModel *pViewModel, const Vector& origin, const QAngle& angles, int event, const char *options );
 		virtual bool	ShouldPredict();
-		virtual void	DrawCrosshair();
 		virtual void	OnDataChanged( DataUpdateType_t type );
 
 		virtual int		GetMuzzleAttachment( void );
 		virtual bool	HideViewModelWhenZoomed( void ) { return true; }
 
-		float			m_flCrosshairDistance;
 		int				m_iAmmoLastCheck;
 		int				m_iAlpha;
 		int				m_iScopeTextureID;
-		int				m_iCrosshairTextureID; // for white additive texture
 
 		virtual int GetMuzzleFlashStyle( void );
 

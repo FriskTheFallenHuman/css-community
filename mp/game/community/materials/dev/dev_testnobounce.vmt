@@ -1,0 +1,5 @@
+"LightMappedGeneric"
+{
+	$basetexture "dev/dev_measurewall01d"	
+	"%noportal" 1
+}

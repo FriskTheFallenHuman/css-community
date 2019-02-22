@@ -226,4 +226,9 @@ $Project "Server"
 			}
 		}
 	}
+	
+	$Folder	"Link Libraries"
+	{
+		$ImpLib		"$SRCDIR\thirdparty\fmod\lib\fmod_vc" [$WIN32]
+	}
 }

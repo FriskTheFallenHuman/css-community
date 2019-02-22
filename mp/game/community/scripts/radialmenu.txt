@@ -1,0 +1,122 @@
+"RadialMenu"
+{
+	//--------------------------------------------------------------
+	"RadioA"
+	{
+		"Center"
+		{
+			"command"	"menuselect coverme"
+			"text"		"#Cstrike_TitlesTXT_Cover_me"
+		}
+		"North"
+		{
+			"command"	"menuselect takepoint"
+			"text"		"#Cstrike_TitlesTXT_You_take_the_point"
+		}
+		"NorthEast"
+		{
+			"command"	"menuselect holdpos"
+			"text"		"#Cstrike_TitlesTXT_Hold_this_position"
+		}	
+		"East"
+		{
+			"command"	"menuselect regroup"
+			"text"		"#Cstrike_TitlesTXT_Regroup_team"
+		}	
+		"SouthEast"
+		{
+			"command"	"menuselect followme"
+			"text"		"#Cstrike_TitlesTXT_Follow_me"
+		}	
+		"South"
+		{
+			"command"	"menuselect takingfire"
+			"text"		"#Cstrike_TitlesTXT_Taking_fire"
+		}
+		"SouthWest"
+		{
+			"command"	"menuselect go"
+			"text"		"#Cstrike_TitlesTXT_Go_go_go"
+		}
+		"West"
+		{
+			"command"	"menuselect fallback"
+			"text"		"#Cstrike_TitlesTXT_Team_fall_back"
+		}
+		"NorthWest"
+		{
+			"command"	"menuselect sticktog"
+			"text"		"#Cstrike_TitlesTXT_Stick_together_team"
+		}	
+	}
+	//--------------------------------------------------------------
+	"RadioB"
+	{
+		"Center"
+		{
+			"command"	"menuselect getinpos"
+			"text"		"#Cstrike_TitlesTXT_Get_in_position_and_wait"
+		}
+		"North"
+		{
+			"command"	"menuselect stormfront"
+			"text"		"#Cstrike_TitlesTXT_Storm_the_front"
+		}
+		"NorthEast"
+		{
+			"command"	"menuselect report"
+			"text"		"#Cstrike_TitlesTXT_Report_in_team"
+		}
+
+		"East"
+		{
+			"command"	"menuselect roger"
+			"text"		"#Cstrike_TitlesTXT_Roger_that"
+		}
+		"SouthEast"
+		{
+			"command"	"menuselect enemyspot"
+			"text"		"#Cstrike_TitlesTXT_Enemy_spotted"
+		}
+		"South"
+		{
+			"command"	"menuselect needbackup"
+			"text"		"#Cstrike_TitlesTXT_Need_backup"
+		}
+		"SouthWest"
+		{
+			"command"	"menuselect sectorclear"
+			"text"		"#Cstrike_TitlesTXT_Sector_clear"
+		}
+		"West"
+		{
+			"command"	"menuselect inposition"
+			"text"		"#Cstrike_TitlesTXT_In_position"
+		}
+		"NorthWest"
+		{
+			"command"	"menuselect reportingin"
+			"text"		"#Cstrike_TitlesTXT_Reporting_in"
+		}
+	}
+	
+	//--------------------------------------------------------------
+	"RadioC"
+	{
+		"Center"
+		{
+			"command"	"menuselect getout"
+			"label"		"#Cstrike_TitlesTXT_Get_out_of_there"
+		}
+		"North"
+		{
+			"command"	"menuselect negative"
+			"text"		"#Cstrike_TitlesTXT_Negative"
+		}
+		"South"
+		{
+			"command"	"menuselect enemydown"
+			"text"		"#Cstrike_TitlesTXT_Enemy_down"
+		}
+	}
+}

@@ -49,6 +49,16 @@ Scheme
 		Border.Selection				"Blank"				// the additional border color for displaying the default/selected button
 		Border.BuyPreset				"Orange"
 
+		// Used By CRadialMenu
+		Rosetta.DefaultFgColor			"White"
+		Rosetta.DefaultBgColor			"Blank"
+		Rosetta.ArmedBgColor			"Blank"
+		Rosetta.DisabledBgColor			"Blank"
+		Rosetta.DisabledBorderColor		"Blank"
+		Rosetta.LineColor				"192 192 192 128"
+		Rosetta.DrawBorder				"0"
+		Rosetta.DefaultFont				"Default" // DefaultDropShadowBold
+		Rosetta.ArmedFont				"Default" // DefaultLargeDropShadowBold
 
 		Button.TextColor				"Orange"
 		Button.BgColor					"0 0 0 64"
@@ -195,6 +205,8 @@ Scheme
 		"team2"			"153 204 255 255" // T's
 
 		"MapDescriptionText"	"Orange" // the text used in the map description window
+		"DeathIconColor"	"255 255 255 255"
+		"PanelBackground"	"46 43 42 220"
 		"CT_Blue"			"153 204 255 255"
 		"T_Red"				"255 64 64 255"
 		"Hostage_Yellow"	"Panel.FgColor"

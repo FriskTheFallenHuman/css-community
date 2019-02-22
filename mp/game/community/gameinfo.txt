@@ -4,18 +4,22 @@
 	title	"COUNTER-STRIKE'"
 	title2	"source"
 	type multiplayer_only
-	nomodels 1
-	nohimodel 1
-	nocrosshair 0
-	advcrosshair 3
+	
+	GameData	"community.fgd"
+	InstancePath 	"maps/instances/"
+
+	nomodels 	1 
+	nohimodel 	1	
+	nocrosshair 0 
+	advcrosshair 	1
 	bots 1
+	nodegraph 0
+
 	hidden_maps
 	{
 		"test_speakers"		1
 		"test_hardware"		1
 	}
-	nodegraph 0
-
 
 	FileSystem
 	{

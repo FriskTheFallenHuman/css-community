@@ -29,6 +29,7 @@
 #include "cs_gamerules.h"
 #include "cs_bot.h"
 #include "tier0/vprof.h"
+#include "filesystem.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -124,33 +125,36 @@ const char *GetGameDescription()
 //-----------------------------------------------------------------------------
 void ClientGamePrecache( void )
 {
-	// Materials used by the client effects
-	CBaseEntity::PrecacheModel( "sprites/white.vmt" );
-	CBaseEntity::PrecacheModel( "sprites/physbeam.vmt" );
+	const char *pFilename = "scripts/client_precache.txt";
+	KeyValues *pValues = new KeyValues( "ClientPrecache" );
 
-	// Legacy temp ents sounds
-	CBaseEntity::PrecacheScriptSound( "Bounce.PistolShell" );
-	CBaseEntity::PrecacheScriptSound( "Bounce.RifleShell" );
-	CBaseEntity::PrecacheScriptSound( "Bounce.ShotgunShell" );
+	if ( !pValues->LoadFromFile( filesystem, pFilename, "GAME" ) )
+	{
+		Error( "Can't open %s for client precache info.", pFilename );
+		pValues->deleteThis();
+		return;
+	}
 
-	// Flashbang-related files
-	engine->ForceExactFile( "sprites/white.vmt" );
-	engine->ForceExactFile( "sprites/white.vtf" );
-	engine->ForceExactFile( "vgui/white.vmt" );
-	engine->ForceExactFile( "vgui/white.vtf" );
-	engine->ForceExactFile( "effects/flashbang.vmt" );
-	engine->ForceExactFile( "effects/flashbang_white.vmt" );
+	for ( KeyValues *pData = pValues->GetFirstSubKey(); pData != NULL; pData = pData->GetNextKey() )
+	{
+		const char *pszType = pData->GetName();
+		const char *pszFile = pData->GetString();
 
-	// Smoke grenade-related files
-	engine->ForceExactFile( "particle/particle_smokegrenade1.vmt" );
-	engine->ForceExactFile( "particle/particle_smokegrenade.vtf" );
+		if ( Q_strlen( pszType ) > 0 &&
+			 Q_strlen( pszFile ) > 0 )
+		{
+			if ( !Q_stricmp( pData->GetName(), "model" ) )
+			{
+				CBaseEntity::PrecacheModel( pszFile );
+			}
+			else if ( !Q_stricmp( pData->GetName(), "scriptsound" ) )
+			{
+				CBaseEntity::PrecacheScriptSound( pszFile );
+			}
+		}
+	}
 
-	// Sniper scope
-	engine->ForceExactFile( "sprites/scope_arc.vmt" );
-	engine->ForceExactFile( "sprites/scope_arc.vtf" );
-
-	// DSP presets - don't want people avoiding the deafening + ear ring
-	engine->ForceExactFile( "scripts/dsp_presets.txt" );
+	pValues->deleteThis();
 }
 
 

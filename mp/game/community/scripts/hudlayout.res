@@ -1,4 +1,3 @@
-
 "Resource/HudLayout.res"
 {
 	HudHealth
@@ -367,7 +366,7 @@
 		"MaxSlots"	"5"
 		"PlaySelectSounds"	"0"
 	}
-
+	
 	HudCrosshair
 	{
 		"fieldName" "HudCrosshair"
@@ -379,21 +378,13 @@
 
 	HudDeathNotice
 	{
-		"fieldName" "HudDeathNotice"
-		"visible" "1"
-		"enabled" "1"
-		"xpos"	 "r640"
-		"ypos"	 "12"
-		"wide"	 "628"
-		"tall"	 "468"
-
-		"MaxDeathNotices" "4"
-		"LineHeight"	  "22"
-		"RightJustify"	  "1"	// If 1, draw notices from the right
-		
-		"TextFont"				"Default"
-		"CTTextColor"			"CT_Blue"
-		"TerroristTextColor"	"T_Red"	
+		"fieldName" 	"HudDeathNotice"
+		"visible"	"1"
+		"enabled"	"1"
+		"xpos"	"r640"
+		"ypos"	"12"
+		"wide"	"628"
+		"tall"	"468"
 	}
 
 	HudVehicle
@@ -569,6 +560,15 @@
 		"textAlignment"	"north"
 	}
 
+	RadialMenu
+	{
+		"fieldName" "RadialMenu"
+		"visible" "1"
+		"enabled" "1"
+		"wide"	 "2450"
+		"tall"	 "480"		
+	}
+	
 	HudScope
 	{
 		"fieldName" "HudZoom"
