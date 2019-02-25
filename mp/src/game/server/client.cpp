@@ -922,8 +922,10 @@ CON_COMMAND( fov, "Change players FOV" )
 //------------------------------------------------------------------------------
 void CC_Player_SetModel( const CCommand &args )
 {
+#ifndef COMMUNITY_DLL
 	if ( gpGlobals->deathmatch )
 		return;
+#endif
 
 	CBasePlayer *pPlayer = ToBasePlayer( UTIL_GetCommandClient() );
 	if ( pPlayer && args.ArgC() == 2)
@@ -1046,7 +1048,7 @@ void CC_Player_PhysSwap( void )
 	}
 }
 static ConCommand physswap("phys_swap", CC_Player_PhysSwap, "Automatically swaps the current weapon for the physcannon and back again." );
-#endif
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Quickly switch to the bug bait, or back to previous item
@@ -1078,6 +1080,7 @@ void CC_Player_BugBaitSwap( void )
 	}
 }
 static ConCommand bugswap("bug_swap", CC_Player_BugBaitSwap, "Automatically swaps the current weapon for the bug bait and back again.", FCVAR_CHEAT );
+#endif
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -1214,8 +1217,10 @@ void CC_God_f (void)
 		   return;
    }
 #else
+#ifndef COMMUNITY_DLL
 	if ( gpGlobals->deathmatch )
 		return;
+#endif
 #endif
 
 	pPlayer->ToggleFlag( FL_GODMODE );
@@ -1383,8 +1388,10 @@ void CC_Notarget_f (void)
 	if ( !pPlayer )
 		return;
 
+#ifndef COMMUNITY_DLL
 	if ( gpGlobals->deathmatch )
 		return;
+#endif
 
 	pPlayer->ToggleFlag( FL_NOTARGET );
 	if ( !(pPlayer->GetFlags() & FL_NOTARGET ) )
