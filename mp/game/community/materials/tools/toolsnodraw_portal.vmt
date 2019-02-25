@@ -1,6 +1,0 @@
-LightmappedGeneric
-{
-$basetexture "Tools/toolsnodraw_portal"
-"%compilenodraw" 1
-"%keywords" "sdk, portal"
-}
