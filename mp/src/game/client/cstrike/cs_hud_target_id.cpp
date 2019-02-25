@@ -220,32 +220,6 @@ void CTargetID::Paint()
 			C_BaseEntity *pEnt = cl_entitylist->GetEnt( iEntIndex );
 
 			//Hostages!
-
-			//"Hostage : Health 100%"
-
-			/*
-			if( long range )
-			{
-				m_flDisplayHistory |= DHF_HOSTAGE_SEEN_FAR;
-				switch ( pLocalPlayer->GetTeamNumber() )
-				{
-				case TERRORIST:
-					HintMessage( "#Hint_prevent_hostage_rescue", TRUE );
-					break;
-
-				case CT:
-					HintMessage( "#Hint_rescue_the_hostages", TRUE );
-					break;
-				}
-			}
-			else
-			{
-					m_flDisplayHistory |= DHF_HOSTAGE_SEEN_NEAR;
-					m_flDisplayHistory |= DHF_HOSTAGE_SEEN_FAR;		// Don't want the other msg to appear now
-					HintMessage( "#Hint_press_use_so_hostage_will_follow", FALSE );
-			}
-			*/
-
 			C_CHostage *pHostage = NULL;
 
 			for( int i=0;i<g_Hostages.Count();i++ )
@@ -317,11 +291,23 @@ void CTargetID::Paint()
 			{
 				xpos = (ScreenWidth() - wide) / 2;
 			}
-			
+
+#ifdef COMMUNITY_CLIENT_DLL
+			// draw a black dropshadow ( the default one looks horrible )
+			vgui::surface()->DrawSetTextPos( xpos+1, ypos+1 );
+			vgui::surface()->DrawSetTextColor( Color(0,0,0,255) );
+			vgui::surface()->DrawPrintText( sIDString, wcslen(sIDString) );		
+
 			vgui::surface()->DrawSetTextFont( m_hFont );
 			vgui::surface()->DrawSetTextPos( xpos, ypos );
 			vgui::surface()->DrawSetTextColor( c );
 			vgui::surface()->DrawPrintText( sIDString, wcslen(sIDString) );
+#else
+			vgui::surface()->DrawSetTextFont( m_hFont );
+			vgui::surface()->DrawSetTextPos( xpos, ypos );
+			vgui::surface()->DrawSetTextColor( c );
+			vgui::surface()->DrawPrintText( sIDString, wcslen(sIDString) );
+#endif
 		}
 	}
 }
