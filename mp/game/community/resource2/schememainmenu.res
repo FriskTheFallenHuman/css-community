@@ -92,7 +92,7 @@
 		{
 			"settings"
 			{
-				"name"			"HYPE" // "Facile Sans"
+				"name"			"Counter-Strike Logo"
 				"tall"			"36" // "65"
 				"weight"		"400"
 				"antialias"		"1"
@@ -103,7 +103,7 @@
 		{
 			"settings"
 			{
-				"name"			"Nokia Pure Text Regular" // Roboto Medium
+				"name"			"StratumNo2"
 				"tall"			"25"
 				"weight"		"400"
 				"antialias"		"1"
@@ -114,7 +114,7 @@
 		{
 			"settings"
 			{
-				"name"			"Nokia Pure Text Regular" // Roboto Medium
+				"name"			"StratumNo2"
 				"tall"			"25"
 				"weight"		"400"
 				"antialias"		"0"
@@ -126,7 +126,7 @@
 		{
 			"settings"
 			{
-				"name"			"Noto Sans"
+				"name"			"StratumNo2"
 				"tall"			"16"
 				"weight"		"400"
 				"antialias"		"1"
@@ -136,10 +136,7 @@
 
 	"CustomFontFiles"
 	{
-		"file"		"resource2/fonts/NotoSans-Regular.ttf" // Noto Sans
-		"file"		"resource2/fonts/FacileSans.ttf" // Facile Sans
-		"file"		"resource2/fonts/Roboto-Medium.ttf" // Roboto Medium
-		"file"		"resource2/fonts/nokia-pure-text.ttf" // Nokia Pure Text Regular
-		"file"		"resource2/fonts/HYPE.ttf" // HYPE
+		"file"		"resource/Medium.ttf" // StratumNo2
+		"file"		"resource/cslogo.ttf" // Counter-Strike Logo
 	}
 }
