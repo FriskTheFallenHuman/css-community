@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "effects/fas_tracer"
+	"$additive" 1
+	"$vertexcolor" 1
+}

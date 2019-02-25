@@ -1,0 +1,8 @@
+"BI_SS_NightVision"
+{
+	"$basetexture" "_rt_NVG"
+	"$noisetexture" "effects/Random3D"
+	"$masktexture" "HUD/nvg_overlay"
+	"$nvlevel" "10"
+}
+

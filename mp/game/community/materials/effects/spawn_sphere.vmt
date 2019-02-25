@@ -1,0 +1,32 @@
+refract
+{
+$normalmap "effects/spawn_sphere_normal"
+$refractamount "-.5"
+$baseTexture "effects/CloudsPerimeterDistance"
+$translucent 1
+
+$refracttint "[.725 .747 .732]"
+Proxies
+{
+TextureScroll
+{
+texturescrollvar $baseTextureTransform
+texturescrollrate .1
+texturescrollangle 0
+}
+Sine
+{
+
+resultVar $alpha
+sineperiod 2
+sinemin .2
+sinemax 1
+}
+TextureScroll
+{
+texturescrollvar $bumptransform
+texturescrollrate .12
+texturescrollangle 0.00
+}
+}
+}

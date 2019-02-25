@@ -1,0 +1,6 @@
+SpriteCard
+{
+$basetexture "effects/muzzleflash4"
+$additive 1
+$depthblend 0
+}

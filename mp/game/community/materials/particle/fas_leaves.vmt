@@ -1,0 +1,10 @@
+SpriteCard
+{
+$basetexture "particle/fas_leaves"
+$DEPTHBLEND 1
+$DEPTHBLENDSCALE 20
+360?$STARTFADESIZE .35
+360?$ENDFADESIZE .45
+360?$BLENDFRAMES 0
+
+}

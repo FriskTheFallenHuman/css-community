@@ -1,0 +1,9 @@
+spritecard
+{
+$basetexture "particle/intestine_beam"
+
+
+
+$splinetype 2
+$nocull 1
+}

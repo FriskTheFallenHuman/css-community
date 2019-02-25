@@ -1,0 +1,16 @@
+SpriteCard
+
+{
+$basetexture "particle/particle_gauze"
+
+$nocull 1
+$splinetype 1
+$depthblend 0
+$depthblendscale 16
+$vertexcolor 1
+$vertexalpha 1
+$orientation 3
+
+
+$ignorez 1
+}

@@ -1,0 +1,33 @@
+UnLitTwoTexture
+{
+"%tooltexture" "effects/rays_dust_00"
+$basetexture "effects/rays_dust_scroll"
+$texture2 "effects/rays_dust_00"
+
+
+$additive 1
+
+
+
+$scale "[.75 .25]"
+$scroll "[2 2]"
+Proxies
+{
+LinearRamp
+{
+resultVar "$scroll[0]"
+rate -.025
+}
+LinearRamp
+{
+resultVar "$scroll[1]"
+rate -.05
+}
+TextureTransform
+{
+scaleVar $scale
+translateVar $scroll
+resultVar $basetexturetransform
+}
+}
+}

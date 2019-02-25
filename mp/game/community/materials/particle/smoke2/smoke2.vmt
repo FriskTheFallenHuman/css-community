@@ -1,0 +1,8 @@
+"SpriteCard"
+{
+	$basetexture "particle/smoke2/smoke2"
+//	$basetexture2 "particle/smoke2/smoke2.vtf"
+//	$addbasetexture2 .025
+	$additive 1
+	$depthblend 1
+}

@@ -1,0 +1,27 @@
+UnlitGeneric
+{
+$baseTexture "effects/tankwall"
+$additive 1
+$proxTeam 1.0
+Proxies
+{
+Sine
+{
+resultVar $alpha
+sineperiod 2
+sinemin 0
+sinemax .5
+}
+PlayerTeam
+{
+team 3 
+resultVar $proxTeam
+}
+Multiply
+{
+srcVar1 $alpha
+srcVar2 $proxTeam
+resultVar $alpha
+}
+}
+}

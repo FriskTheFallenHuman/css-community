@@ -1,0 +1,15 @@
+SpriteCard
+{
+$basetexture "particle/fire_particle_4/fire_particle_4.vtf"
+$addself 1
+
+
+
+$maxsize .85
+$startfadesize .27
+$endfadesize .35
+$blendframes 0
+
+$depthblend 0
+$overbrightfactor 7.5
+}

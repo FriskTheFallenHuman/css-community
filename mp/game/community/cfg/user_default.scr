@@ -104,6 +104,13 @@ DESCRIPTION INFO_OPTIONS
 		{ "1" }
 	}
 	
+	"cl_new_impact_effects"
+	{
+		"#Cstrike_ParticleImpacts"
+		{ BOOL }
+		{ "1" }
+	}
+	
 	"hud_takesshots"
 	{
 		"#game_takesshots"

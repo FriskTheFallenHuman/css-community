@@ -1,0 +1,18 @@
+UnlitGeneric
+{
+
+$basetexture "particle/particle_smokegrenade"
+$vertexcolor 1
+$vertexalpha 1
+$translucent 1
+"srgb?$alpha" "0.2"
+$color2 "[ 1 1 1 ]"
+UnlitGeneric_hdr_dx9
+{
+$color2 "[ .75 .75 .75 ]"
+}
+$depthblend 1
+$depthblendscale 90
+"360?$alpha" "0.9"
+"360?$linearwrite" 1
+}

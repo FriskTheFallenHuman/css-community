@@ -1,0 +1,9 @@
+SpriteCard
+{
+$basetexture "particle/string_light_beam.vtf"
+$translucent 1
+$nocull 1
+$splinetype 1
+$depthblend 0
+$orientation 3
+}

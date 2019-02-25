@@ -1,0 +1,9 @@
+spritecard
+{
+$basetexture "particle\particle_flares\particle_flare_003"
+
+$additive 1
+
+$depthblend 0
+
+}

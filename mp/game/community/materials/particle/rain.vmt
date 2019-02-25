@@ -1,0 +1,12 @@
+UnlitGeneric
+{
+$translucent 1
+$basetexture "particle/rain"
+$vertexcolor 1
+$vertexalpha 1
+"srgb?$alpha" ".2"
+
+
+
+
+}

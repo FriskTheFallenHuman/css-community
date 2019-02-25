@@ -1,0 +1,7 @@
+UnlitGeneric
+{
+$baseTexture "effects/gratelights"
+$additive 1
+$decal 1
+$decalscale ".25"
+}

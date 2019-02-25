@@ -1,0 +1,6 @@
+SpriteCard
+{
+$basetexture "particle/fair_ticket"
+$depthblend 0
+$blendframes 0
+}

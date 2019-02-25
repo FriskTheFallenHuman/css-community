@@ -1,0 +1,6 @@
+spritecard
+{
+$basetexture "particle\pebble1\particle_pebble_1"
+$blendframes 0
+$depthblend 0
+}

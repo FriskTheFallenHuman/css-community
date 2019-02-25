@@ -1,0 +1,10 @@
+particles_manifest
+{
+	"file"		"particles/achievement.pcf"
+	"file"		"particles/blood_impact.pcf"
+	"file"		"particles/fire_01.pcf"
+	"file"		"particles/burning_fx.pcf"
+	"file"		"particles/water_impact.pcf"
+	"file"		"!particles/muzzleflashes.pcf"
+	"file"		"particles/error.pcf"
+}

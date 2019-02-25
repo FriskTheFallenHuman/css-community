@@ -1,0 +1,28 @@
+UnlitGeneric
+{
+$baseTexture "effects/scavenge_boundary"
+$additive 1
+$translucent 1
+$proxTeam 1.0
+Proxies
+{
+Sine
+{
+resultVar $alpha
+sineperiod 1.5
+sinemin 0.05
+sinemax 0.5
+}
+PlayerTeam
+{
+team 2 
+resultVar $proxTeam
+}
+Multiply
+{
+srcVar1 $alpha
+srcVar2 $proxTeam
+resultVar $alpha
+}
+}
+}

@@ -1,0 +1,5 @@
+UnlitGeneric
+{
+$additive 1
+$basetexture "vgui\white"
+}

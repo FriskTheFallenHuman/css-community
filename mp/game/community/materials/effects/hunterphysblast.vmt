@@ -1,0 +1,17 @@
+"Refract"
+{
+//	"$model" 1
+ 	"$normalmap" "effects/hunterphysblast_normal"
+ 	"$refractamount" "-.17"
+	"$vertexalpha" "1"
+	"$vertexcolor" "1"
+	"$translucent" "1"
+	"$forcerefract" 1
+ 	"$bluramount" "1"
+	"$nofog" "1"
+
+	"Refract_DX60"
+	{
+		"$fallbackmaterial" "sprites/heatwavedx70"
+	}
+}

@@ -1,0 +1,7 @@
+UnlitGeneric
+{
+$basetexture "effects/redflare"
+$additive 1
+$vertexcolor 1
+$ignoreZ 1
+}

@@ -1,0 +1,7 @@
+LightmappedGeneric
+{
+$translucent 1
+$basetexture "effects\red_dot"
+$surfaceprop glass
+"%keywords" l4d2
+}

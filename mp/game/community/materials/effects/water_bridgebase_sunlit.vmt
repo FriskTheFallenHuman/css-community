@@ -1,0 +1,19 @@
+UnlitTwoTexture
+{
+$basetexture "effects/water_bridgebase_00"
+$texture2 "effects/water_bridgemask_00"
+$translucent 1
+
+$color2 "[ 0.25 0.225 0.220]"
+$scale "[.15 .15]"
+$scroll "[1 1]"
+Proxies
+{
+TextureScroll
+{
+texturescrollvar $baseTextureTransform
+texturescrollrate 0.025
+texturescrollangle 240.00
+}
+}
+}

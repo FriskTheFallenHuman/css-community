@@ -1,0 +1,6 @@
+DecalModulate
+{
+$basetexture "effects/shadow_furniture"
+$decal 1
+$decalscale 0.15
+}

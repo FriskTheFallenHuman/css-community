@@ -1,0 +1,14 @@
+spritecard
+{
+$basetexture "particle\particle_modulate_01"
+$translucent 1
+$mod2x 1
+$depthblend 1
+$depthblendscale 16
+
+$startfadesize 0.2
+$endfadesize 0.425
+$overbrightfactor 1
+
+
+}

@@ -1,0 +1,9 @@
+spritecard
+{
+$basetexture "particle\bleedout_01"
+$nocull 1
+$translucent 1
+$depthblend 0
+
+
+}

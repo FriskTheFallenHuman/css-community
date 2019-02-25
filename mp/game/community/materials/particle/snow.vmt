@@ -1,0 +1,11 @@
+UnlitGeneric
+{
+$basetexture "particle/ashes"
+$translucent 1
+$vertexcolor 1
+
+UnlitGeneric_HDR_dx9
+{
+$color "[ .65 .65 .65 ]"
+}
+}
