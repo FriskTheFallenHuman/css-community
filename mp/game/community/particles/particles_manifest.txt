@@ -7,4 +7,6 @@ particles_manifest
 	"file"		"particles/water_impact.pcf"
 	"file"		"!particles/muzzleflashes.pcf"
 	"file"		"particles/error.pcf"
+	"file"		"!particles/duststorm.pcf"
+	"file"		"!particles/impact_fx.pcf"
 }
