@@ -90,8 +90,16 @@ bool CHudCSCrosshair::ShouldDraw()
 	if ( !pPlayer )
 		return false;
 
+	// Draw the targeting zone around the pCrosshair
+	if ( pPlayer->IsInVGuiInputMode() )
+		return false;
+
 	CWeaponCSBase *pWeapon = pPlayer->GetActiveCSWeapon();
 	if ( !pWeapon )
+		return false;
+
+	// no crosshair for sniper rifles
+	if ( pWeapon->GetCSWpnData().m_WeaponType == WEAPONTYPE_SNIPER_RIFLE )
 		return false;
 
 	return pWeapon->ShouldDrawCrosshair();

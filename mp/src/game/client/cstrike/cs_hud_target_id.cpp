@@ -293,12 +293,13 @@ void CTargetID::Paint()
 			}
 
 #ifdef COMMUNITY_CLIENT_DLL
+			vgui::surface()->DrawSetTextFont( m_hFont );
+
 			// draw a black dropshadow ( the default one looks horrible )
 			vgui::surface()->DrawSetTextPos( xpos+1, ypos+1 );
 			vgui::surface()->DrawSetTextColor( Color(0,0,0,255) );
 			vgui::surface()->DrawPrintText( sIDString, wcslen(sIDString) );		
 
-			vgui::surface()->DrawSetTextFont( m_hFont );
 			vgui::surface()->DrawSetTextPos( xpos, ypos );
 			vgui::surface()->DrawSetTextColor( c );
 			vgui::surface()->DrawPrintText( sIDString, wcslen(sIDString) );
