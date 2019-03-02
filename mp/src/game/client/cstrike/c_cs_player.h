@@ -17,10 +17,20 @@
 #include "weapon_csbase.h"
 #include "baseparticleentity.h"
 #include "beamdraw.h"
+#include "flashlighteffect.h"
 
+//Tony; m_pFlashlightEffect is private, so just subclass. We may want to do some more stuff with it later anyway.
+class CCSFlashlightEffect : public CFlashlightEffect
+{
+public:
+	CCSFlashlightEffect( int nIndex = 0 ) : CFlashlightEffect( nIndex  ) { }
+
+	~CCSFlashlightEffect() {};
+
+	virtual void UpdateLight( const Vector &vecPos, const Vector &vecDir, const Vector &vecRight, const Vector &vecUp, int nDistance );
+};
 
 class C_PhysicsProp;
-
 
 class CAddonModel
 {
@@ -71,7 +81,6 @@ public:
 
 	virtual const QAngle& EyeAngles();
 	virtual const QAngle& GetRenderAngles();
-	virtual void CalcObserverView( Vector& eyeOrigin, QAngle& eyeAngles, float& fov );
 
 	virtual void			GetRenderBounds( Vector& theMins, Vector& theMaxs );
 	virtual void			GetShadowRenderBounds( Vector &mins, Vector &maxs, ShadowType_t shadowType );
@@ -309,8 +318,10 @@ private:
 	int					m_iOldIDEntIndex;
 	CountdownTimer		m_holdTargetIDTimer;
 
+	virtual void	UpdateFlashlight( void ); //Tony; override.
 	void ReleaseFlashlight( void );
 	Beam_t	*m_pFlashlightBeam;
+	CCSFlashlightEffect *m_pCSFlashLightEffect;
 
 	class CCSSoundEvent
 	{

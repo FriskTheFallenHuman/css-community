@@ -50,6 +50,7 @@
 
 #include "iviewrender_beams.h"			// flashlight beam
 
+#define FLASHLIGHT_DISTANCE 1000
 
 ConVar cl_left_hand_ik( "cl_left_hand_ik", "0", 0, "Attach player's left hand to rifle with IK." );
 
@@ -2125,6 +2126,70 @@ void C_CSPlayer::Simulate( void )
 	BaseClass::Simulate();
 }
 
+void FormatViewModelAttachmentFlashlight( Vector &vOrigin, bool bInverse );
+
+//-----------------------------------------------------------------------------
+// Purpose: Creates, destroys, and updates the flashlight effect as needed.
+//-----------------------------------------------------------------------------
+void C_CSPlayer::UpdateFlashlight()
+{
+	// The dim light is the flashlight.
+	if ( IsEffectActive( EF_DIMLIGHT ) )
+	{
+		if ( !m_pCSFlashLightEffect )
+		{
+			// Turned on the headlight; create it.
+			m_pCSFlashLightEffect = new CCSFlashlightEffect( index );
+
+			if ( !m_pCSFlashLightEffect )
+				return;
+
+			m_pCSFlashLightEffect->TurnOn();
+		}
+
+		Vector vecForward, vecRight, vecUp;
+		Vector position = EyePosition();
+
+		if ( ::input->CAM_IsThirdPerson() )
+		{
+			int iAttachment = LookupAttachment( "muzzle_flash" );
+
+			if ( iAttachment >= 0 )
+			{
+				Vector vecOrigin;
+
+				//Tony; EyeAngles will return proper whether it's local player or not.
+				QAngle eyeAngles = EyeAngles();
+
+				GetAttachment( iAttachment, vecOrigin, eyeAngles );
+
+				Vector vForward;
+				AngleVectors( eyeAngles, &vecForward, &vecRight, &vecUp );
+				position = vecOrigin;
+			}
+			else
+				EyeVectors( &vecForward, &vecRight, &vecUp );
+		}
+		else
+			EyeVectors( &vecForward, &vecRight, &vecUp );
+
+
+		// Update the light with the new position and direction.		
+		m_pCSFlashLightEffect->UpdateLight( position, vecForward, vecRight, vecUp, FLASHLIGHT_DISTANCE );
+	}
+	else if ( m_pCSFlashLightEffect )
+	{
+		// Turned off the flashlight; delete it.
+		delete m_pCSFlashLightEffect;
+		m_pCSFlashLightEffect = NULL;
+	}
+}
+
+void CCSFlashlightEffect::UpdateLight( const Vector &vecPos, const Vector &vecDir, const Vector &vecRight, const Vector &vecUp, int nDistance )
+{
+	CFlashlightEffect::UpdateLight( vecPos, vecDir, vecRight, vecUp, nDistance );
+}
+
 void C_CSPlayer::ReleaseFlashlight( void )
 {
 	if( m_pFlashlightBeam )
@@ -2158,63 +2223,3 @@ void C_CSPlayer::ImpactTrace( trace_t *pTrace, int iDamageType, char *pCustomImp
 
 	BaseClass::ImpactTrace( pTrace, iDamageType, pCustomImpactName );
 }
-
-
-//-----------------------------------------------------------------------------
-void C_CSPlayer::CalcObserverView( Vector& eyeOrigin, QAngle& eyeAngles, float& fov )
-{
-	/**
-	 * TODO: Fix this!
-	// CS:S standing eyeheight is above the collision volume, so we need to pull it
-	// down when we go into close quarters.
-	float maxEyeHeightAboveBounds = VEC_VIEW.z - VEC_HULL_MAX.z;
-	if ( GetObserverMode() == OBS_MODE_IN_EYE &&
-		maxEyeHeightAboveBounds > 0.0f &&
-		GetObserverTarget() &&
-		GetObserverTarget()->IsPlayer() )
-	{
-		const float eyeClearance = 12.0f; // eye pos must be this far below the ceiling
-
-		C_CSPlayer *target = ToCSPlayer( GetObserverTarget() );
-
-		Vector offset = eyeOrigin - GetAbsOrigin();
-
-		Vector vHullMin = VEC_HULL_MIN;
-		vHullMin.z = 0.0f;
-		Vector vHullMax = VEC_HULL_MAX;
-
-		Vector start = GetAbsOrigin();
-		start.z += vHullMax.z;
-		Vector end = start;
-		end.z += eyeClearance + VEC_VIEW.z - vHullMax.z;
-
-		vHullMax.z = 0.0f;
-
-		Vector fudge( 1, 1, 0 );
-		vHullMin += fudge;
-		vHullMax -= fudge;
-
-		trace_t trace;
-		Ray_t ray;
-		ray.Init( start, end, vHullMin, vHullMax );
-		UTIL_TraceRay( ray, MASK_PLAYERSOLID, target, COLLISION_GROUP_PLAYER_MOVEMENT, &trace );
-
-		if ( trace.fraction < 1.0f )
-		{
-			float est = start.z + trace.fraction * (end.z - start.z) - GetAbsOrigin().z - eyeClearance;
-			if ( ( target->GetFlags() & FL_DUCKING ) == 0 && !target->GetFallVelocity() && !target->IsDucked() )
-			{
-				offset.z = est;
-			}
-			else
-			{
-				offset.z = min( est, offset.z );
-			}
-			eyeOrigin.z = GetAbsOrigin().z + offset.z;
-		}
-	}
-	*/
-
-	BaseClass::CalcObserverView( eyeOrigin, eyeAngles, fov );
-}
-
