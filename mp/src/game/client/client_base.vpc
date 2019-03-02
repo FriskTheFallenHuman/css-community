@@ -172,6 +172,9 @@ $Project
 		
 	$Folder	"Source Files"
 	{
+		$File "worldlight.h"
+		$File "worldlight.cpp"
+
 		$File	"C_Func_Monitor.cpp"
 		$File	"geiger.cpp"
 		$File	"history_resource.cpp"
