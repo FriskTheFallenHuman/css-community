@@ -14,7 +14,7 @@ Currently this mod is in a pre-alpha state so don’t expected any class of bugs
 - [ ] Redo the Bots and hostage’s AI using the [(Nextbot System)](https://developer.valvesoftware.com/wiki/NextBot)
 - [ ] Implement the Vote System so everyone can vote without using plugins
 - [ ] Implement Class Based Hands Like CSGO
-- [ ] Implement CSPromod's Shadows RTT
+- [x] Implement CSPromod's Shadows RTT
 - [ ] Bring back to life the shield.
 
 ### Warning
