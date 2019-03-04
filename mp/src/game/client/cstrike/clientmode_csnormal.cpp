@@ -42,12 +42,12 @@
 #include "prediction.h"
 #include "datacache/imdlcache.h"
 
-#if defined ( COMMUNITY_DLL ) && defined ( GLOWS_ENABLE )
+#ifdef GLOWS_ENABLE
 #include "glow_outline_effect.h"
 #include "clienteffectprecachesystem.h"
 #endif
 
-#if defined ( COMMUNITY_DLL ) && defined ( GLOWS_ENABLE )
+#ifdef GLOWS_ENABLE 
 CLIENTEFFECT_REGISTER_BEGIN( PrecachePostProcessingEffectsGlow )
 	CLIENTEFFECT_MATERIAL( "dev/glow_color" )
 	CLIENTEFFECT_MATERIAL( "dev/halo_add_to_screen" )
@@ -274,71 +274,6 @@ void ClientModeCSNormal::Update()
 		m_pViewport->SetVisible( false );
 }
 
-
-/*
-void ClientModeCSNormal::UpdateSpectatorMode( void )
-{
-	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
-
-	if ( !pPlayer )
-		return;
-
-	IMapOverview * overviewmap = m_pViewport->GetMapOverviewInterface();
-
-	if ( !overviewmap )
-		return;
-
-	overviewmap->SetTime( gpGlobals->curtime );
-
-	int obs_mode = pPlayer->GetObserverMode();
-
-	if ( obs_mode < OBS_MODE_IN_EYE )
-		return;
-
-	Vector worldpos = pPlayer->GetLocalOrigin();
-	QAngle angles; engine->GetViewAngles( angles );
-
-	C_BaseEntity *target = pPlayer->GetObserverTarget();
-
-	if ( target && (obs_mode == OBS_MODE_IN_EYE || obs_mode == OBS_MODE_CHASE) )
-	{
-		worldpos = target->GetAbsOrigin();
-
-		if ( obs_mode == OBS_MODE_IN_EYE )
-		{
-			angles = target->GetAbsAngles();
-		}
-	}
-
-	Vector2D mappos = overviewmap->WorldToMap( worldpos );
-
-	overviewmap->SetCenter( mappos );
-	overviewmap->SetAngle( angles.y );	
-	
-	for ( int i = 1; i<= MAX_PLAYERS; i++)
-	{
-		C_BaseEntity *ent = ClientEntityList().GetEnt( i );
-
-		if ( !ent || !ent->IsPlayer() )
-			continue;
-
-		C_BasePlayer *p = ToBasePlayer( ent );
-
-		// update position of active players in our PVS
-		Vector position = p->GetAbsOrigin();
-		QAngle angle = p->GetAbsAngles();
-
-		if ( p->IsDormant() )
-		{
-			// if player is not in PVS, use PlayerResources data
-			position = g_PR->GetPosition( i );
-			angles[1] = g_PR->GetViewAngle( i );
-		}
-		
-		overviewmap->SetPlayerPositions( i-1, position, angles );
-	}
-} */
-
 //-----------------------------------------------------------------------------
 // Purpose: We've received a keypress from the engine. Return 1 if the engine is allowed to handle it.
 //-----------------------------------------------------------------------------
@@ -351,14 +286,12 @@ int	ClientModeCSNormal::KeyInput( int down, ButtonCode_t keynum, const char *psz
 	return BaseClass::KeyInput( down, keynum, pszCurrentBinding );
 }
 
-
 ClientModeCSNormal g_ClientModeNormal;
 
 IClientMode *GetClientModeNormal()
 {
 	return &g_ClientModeNormal;
 }
-
 
 ClientModeCSNormal* GetClientModeCSNormal()
 {
@@ -896,7 +829,7 @@ bool ClientModeCSNormal::CanRecordDemo( char *errorMsg, int length ) const
 	return true;
 }
 
-#if defined ( COMMUNITY_DLL ) && defined ( GLOWS_ENABLE )
+#if defined ( GLOWS_ENABLE )
 bool ClientModeCSNormal::DoPostScreenSpaceEffects( const CViewSetup *pSetup )
 {
 	CMatRenderContextPtr pRenderContext( materials );
