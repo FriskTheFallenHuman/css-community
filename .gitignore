@@ -67,6 +67,7 @@ config.cfg
 # Windows build products
 *.filters
 *.vpc_crc
+*.vpc.sentinel
 
 # Loose files skyped by git
 mp/src/.vs
