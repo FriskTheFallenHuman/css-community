@@ -1,11 +1,19 @@
-## Counter Strike Source: Community Edition
+# Counter Strike Source: Community Edition
 
 **Counter Strike Source: Community Edition** is open source port of the leaked 2007 Source engine leak of the award winner Counter Strike Source. 
 
 This mod is orient to Community so everyone can grow the mod whit his Contributions.
 Currently this mod is in a pre-alpha state so don’t expected any class of bugs.
 
-### Goals
+[![CircleCI](https://circleci.com/gh/FriskTheFallenHuman/css-community.svg?style=svg)](https://circleci.com/gh/FriskTheFallenHuman/css-community)
+
+## :hammer: Building
+
+1. Download and install [Visual Studio 2013](https://go.microsoft.com/fwlink/?LinkId=532495&clcid=0x409).
+2. Download and install the [Multibyte MFC Library](https://www.microsoft.com/en-gb/download/details.aspx?id=40770).
+3. Run first `creategameprojects.bat` and build it this contains the mod dll need to run the mod.
+
+## :clipboard: Goals
 
 - [x] Finish the port of the game to Source 2013
 - [ ] Make fully functional the cut VIP mode so everyone can play it without server plugins
@@ -17,24 +25,24 @@ Currently this mod is in a pre-alpha state so don’t expected any class of bugs
 - [x] Implement CSPromod's Shadows RTT
 - [ ] Bring back to life the shield.
 
-### Warning
+## :heavy_exclamation_mark: Warning
 
 Although this mod is based on SourcePlusPlus's CSS Port, some things will not work has expected.
 
-### Bug
+## :bug: Bugs
 
-- The prop’s physics is a little... estranged... well sometimes you pass the entire prop but other times the prop push the player.
+- Prop physics are weird due that CS:S Uses sv_turbophysics.
 - The flashbang doesn’t disappear sometimes.
 - The Animation system used in the leak is the same in the HL2MP it used the base_playeranimstate so this animsystem don’t come whit a MP support so you can see the player making the walk anim but stuck at the first frame.
   The only way to fix this is redo the animation system to make work whit multiplayer_animstates.
-- ~~The Dynamic crosshair it’s not the same to the he original CSS someone of the cvars don’t work.~~
+- ~~The Dynamic crosshair it’s not the same to the he original CSS someone of the cvars don’t work.~~ :white_check_mark: Fixed
 - Using the Bots may cause the game crash. 
 
+## :mega: Contributing
 
+Feel free to contribute to the project with pull requests. They will be reviewed and merged as fast as possible.
 
-
-
-### Credits
+## :clipboard: Credits
 
 |           **Valve**            |           Source Engine and Counter Strike Source            |
 | :----------------------------: | :----------------------------------------------------------: |
