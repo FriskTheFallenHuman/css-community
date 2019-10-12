@@ -72,6 +72,11 @@ IterationRetval_t CRagdollEnumerator::EnumElement( IHandleEntity *pHandleEntity 
 //-----------------------------------------------------------------------------
 bool FX_AffectRagdolls( Vector vecOrigin, Vector vecStart, int iDamageType )
 {
+#ifdef COMMUNITY_CLIENT_DLL
+	//FIXME: Ragdolls crash the game when shot.. Why? Please Fix! - Reece 29/05/19
+	return false;
+#endif
+
 	// don't do this when lots of ragdolls are simulating
 	if ( s_RagdollLRU.CountRagdolls(true) > 1 )
 		return false;
