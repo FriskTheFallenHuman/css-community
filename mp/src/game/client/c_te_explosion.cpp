@@ -42,8 +42,10 @@ IterationRetval_t CRagdollExplosionEnumerator::EnumElement( IHandleEntity *pHand
 	// If the ragdoll was created on this tick, then the forces were already applied on the server
 	if ( pModel == NULL || WasRagdollCreatedOnCurrentTick( pEnt ) )
 		return ITERATION_CONTINUE;
-	
+
+#ifndef COMMUNITY_CLIENT_DLL
 	m_Entities.AddToTail( pEnt );
+#endif
 
 	return ITERATION_CONTINUE;
 }
@@ -68,7 +70,7 @@ CRagdollExplosionEnumerator::~CRagdollExplosionEnumerator()
 		UTIL_TraceLine( m_vecOrigin, position, MASK_SHOT_HULL, NULL, COLLISION_GROUP_NONE, &tr );
 
 		// debugoverlay->AddLineOverlay( m_vecOrigin, position, 0,255,0, true, 18.0 );
-#ifdef COMMUNITY_DLL
+#ifdef COMMUNITY_CLIENT_DLL
 		Assert(tr.m_pEnt != NULL);
  		if ( tr.fraction < 1.0f || tr.m_pEnt != pModel)
 #else
