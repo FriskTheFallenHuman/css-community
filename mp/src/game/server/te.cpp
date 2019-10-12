@@ -125,10 +125,14 @@ private:
 		{
 			CRecipientFilter& _filter = (( CRecipientFilter & )filter);
 
+			// TODO: Check if this had some side effect
+			// allow blood impact fx
+#ifndef COMMUNITY_DLL
 			if ( !_filter.IgnorePredictionCull() )
 			{
 				_filter.RemoveRecipient( (CBasePlayer *)GetSuppressHost()  );
 			}
+#endif
 
 			if ( !_filter.GetRecipientCount() )
 			{
