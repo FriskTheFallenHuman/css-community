@@ -49,8 +49,7 @@ $Configuration
 		$SystemFrameworks				"Carbon" [$OSXALL]
 		$SystemLibraries				"rt" [$LINUXALL]
 		$IgnoreImportLibrary			"TRUE"
-		$AdditionalLibraryDirectories	"$BASE;$SRCDIR\thirdparty\hlib\lib"
-		$AdditionalDependencies			"$BASE Ws2_32.lib odbc32.lib odbccp32.lib Shlwapi.lib winmm.lib HLLib.lib" [$WIN32]
+		$AdditionalDependencies			"$BASE Ws2_32.lib odbc32.lib odbccp32.lib Shlwapi.lib winmm.lib" [$WIN32]
 		$IgnoreSpecificLibrary			"libc;libcd;libcmtd;msvcrt"
 	}
 }
@@ -153,8 +152,6 @@ $Project "GameUI2"
 		$Lib		vgui_controls
 		$Lib		vtf
 		$ImpLib		steam_api
-		
-		$ImpLib		"$SRCDIR\thirdparty\hlib\lib\HLLib"
 		
 		$Lib $LIBCOMMON/libcrypto [$POSIX]
 
