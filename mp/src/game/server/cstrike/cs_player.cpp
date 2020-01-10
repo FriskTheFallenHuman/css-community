@@ -761,7 +761,7 @@ void CCSPlayer::Spawn()
 	m_cycleLatch = 0;
 	m_cycleLatchTimer.Start( RandomFloat( 0.0f, CycleLatchInterval ) );
 
-	StockPlayerAmmo();
+	//StockPlayerAmmo();
 }
 
 void CCSPlayer::ShowViewPortPanel( const char * name, bool bShow, KeyValues *data )
@@ -6150,7 +6150,7 @@ CBaseEntity	*CCSPlayer::GiveNamedItem( const char *pszName, int iSubType )
 	}
 	m_bIsBeingGivenItem = false;
 
-	StockPlayerAmmo( pWeapon );
+	//StockPlayerAmmo( pWeapon );
 	return pent;
 }
 
