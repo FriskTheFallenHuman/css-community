@@ -168,7 +168,7 @@ void CHudHealth::Paint( void )
 {
 	if( m_pHealthIcon )
 	{
-		m_pHealthIcon->DrawSelf( 0, icon_ypos, icon_wide, icon_tall, GetFgColor() );
+		m_pHealthIcon->DrawSelf( icon_xpos, icon_ypos, icon_wide, icon_tall, GetFgColor() );
 	}
 
 	//draw the health icon

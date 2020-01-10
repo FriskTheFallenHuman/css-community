@@ -104,14 +104,14 @@ void CHudArmor::Paint()
 		{
 			if( m_pArmor_HelmetIcon )
 			{
-				m_pArmor_HelmetIcon->DrawSelf( 0, icon_ypos, icon_wide, icon_tall, GetFgColor() );
+				m_pArmor_HelmetIcon->DrawSelf( icon_xpos, icon_ypos, icon_wide, icon_tall, GetFgColor() );
 			}
 		}
 		else
 		{
 			if( m_pArmorIcon )
 			{
-				m_pArmorIcon->DrawSelf( 0, icon_ypos, icon_wide, icon_tall, GetFgColor() );
+				m_pArmorIcon->DrawSelf( icon_xpos, icon_ypos, icon_wide, icon_tall, GetFgColor() );
 			}
 		}
 
