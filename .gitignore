@@ -93,11 +93,11 @@ mp/src/mathlib/mathlib\.vpc\.sentinel
 mp/game/bin/
 mp/game/*/cfg/server_blacklist.txt
 mp/game/*/cfg/settings.scr
+mp/game/*/cfg/user.scr
 mp/game/*/cfg/BuyPresets_ter.vdf
 mp/game/*/cfg/BuyPresets_ct.vdf
 mp/game/*/custom/
 mp/game/*/bin/fmod.dll
-mp/game/*/bin/HLLib.dll
 mp/game/*/download/
 mp/game/*/downloadlists/
 mp/game/*/screenshots/
@@ -111,8 +111,3 @@ mp/game/*/materials/vgui/logos/spray\.vmt
 mp/game/*/materials/vgui/logos/spray\.vtf
 mp/src/game/server/Debug_*/player\.obj\.enc
 mp/src/game/server/Debug_*/cs_player\.obj\.enc
-mp/src/thirdparty/hlib/sln/vs10/HLLib/Win32/*
-mp/src/thirdparty/hlib/sln/vs10/HLExtract/Win32/*
-mp/src/thirdparty/hlib/sln/vs10/HLExtract.Net/Win32/*
-mp/src/thirdparty/hlib/sln/vs10/HLExtract.Net/bin/Release/HLExtract.Net.exe
-mp/src/thirdparty/hlib/sln/vs10/HLExtract.Net/bin/Release/HLLib.x86.dll
