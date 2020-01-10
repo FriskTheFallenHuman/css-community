@@ -56,6 +56,7 @@
 #include "npcevent.h"
 #include "cs_gamestats.h"
 #include "gamestats.h"
+#include "vehicle_base.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -72,7 +73,6 @@ const float CycleLatchInterval = 0.2f;
 ConVar cs_ShowStateTransitions( "cs_ShowStateTransitions", "-2", FCVAR_CHEAT, "cs_ShowStateTransitions <ent index or -1 for all>. Show player state transitions." );
 ConVar sv_max_usercmd_future_ticks( "sv_max_usercmd_future_ticks", "8", 0, "Prevents clients from running usercmds too far in the future. Prevents speed hacks." );
 
-
 ConVar bot_mimic( "bot_mimic", "0", FCVAR_CHEAT );
 ConVar bot_freeze( "bot_freeze", "0", FCVAR_CHEAT );
 ConVar bot_crouch( "bot_crouch", "0", FCVAR_CHEAT );
@@ -83,12 +83,11 @@ extern ConVar sv_turbophysics;
 
 #define THROWGRENADE_COUNTER_BITS 3
 
-
 EHANDLE g_pLastCTSpawn;
 EHANDLE g_pLastTerroristSpawn;
 
 void TE_RadioIcon( IRecipientFilter& filter, float delay, CBaseEntity *pPlayer );
-
+bool IsInCommentaryMode( void );
 
 // -------------------------------------------------------------------------------- //
 // Classes
@@ -1468,8 +1467,12 @@ void CCSPlayer::Pain( bool bHasArmour )
 int CCSPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 {
 	CTakeDamageInfo info = inputInfo;
-
 	CBaseEntity *pInflictor = info.GetInflictor();
+	IServerVehicle *pVehicle = GetVehicle();
+	float flArmorBonus = 0.5f;
+	float flArmorRatio = 0.5f;
+	float flDamage = info.GetDamage();
+	bool bFriendlyFire = CSGameRules()->IsFriendlyFireOn();
 
 	if ( !pInflictor )
 		return 0;
@@ -1477,11 +1480,41 @@ int CCSPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 	if ( GetMoveType() == MOVETYPE_NOCLIP || GetMoveType() == MOVETYPE_OBSERVER )
 		return 0;
 
-	float flArmorBonus = 0.5f;
-	float flArmorRatio = 0.5f;
-	float flDamage = info.GetDamage();
+	if ( pVehicle )
+	{
+		// Let the vehicle decide if we should take this damage or not
+		if ( pVehicle->PassengerShouldReceiveDamage( info ) == false )
+			return 0;
+	}
 
-	bool bFriendlyFire = CSGameRules()->IsFriendlyFireOn();
+	if ( IsInCommentaryMode() )
+	{
+		if( !ShouldTakeDamageInCommentaryMode( info ) )
+			return 0;
+	}
+
+	if ( GetFlags() & FL_GODMODE )
+		return 0;
+
+	if ( m_debugOverlays & OVERLAY_BUDDHA_MODE ) 
+	{
+		if ( ( m_iHealth - info.GetDamage() ) <= 0 )
+		{
+			m_iHealth = 1;
+			return 0;
+		}
+	}
+
+	// Already dead
+	if ( !IsAlive() )
+		return 0;
+
+	// go take the damage first
+	if ( !CSGameRules()->FPlayerCanTakeDamage( this, info.GetAttacker(), inputInfo ) )
+	{
+		// Refuse the damage
+		return 0;
+	}
 
 	// warn about team attacks
 	if ( bFriendlyFire && pInflictor->GetTeamNumber() == GetTeamNumber() && pInflictor != this && info.GetAttacker() != this )
@@ -1555,8 +1588,9 @@ int CCSPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 
 		// keep track of amount of damage last sustained
 		m_lastDamageAmount = flDamage;
+
 		// Deal with Armour
-		if ( ArmorValue() && !( info.GetDamageType() & (DMG_FALL | DMG_DROWN)) && IsArmored( m_LastHitGroup ) )
+		if ( ArmorValue() && !( info.GetDamageType() & ( DMG_FALL | DMG_DROWN | DMG_POISON | DMG_RADIATION ) ) && IsArmored( m_LastHitGroup ) ) // armor doesn't protect against fall or drown damage!
 		{
 			float flNew = flDamage * flArmorRatio;
 			float flArmor = (flDamage - flNew) * flArmorBonus;
