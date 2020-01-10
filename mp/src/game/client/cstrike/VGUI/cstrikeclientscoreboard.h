@@ -47,8 +47,11 @@ private:
 	static bool CSPlayerSortFunc( vgui::SectionedListPanel *list, int itemID1, int itemID2 );
 
 	// rounded corners
-	Color					 m_bgColor;
-	Color					 m_borderColor;
+	Color m_bgColor;
+	Color m_borderColor;
+
+	int m_iImageDead, m_iImageBomb, m_iImageVIP;
+	int m_iStoredScoreboardWidth; // Store the full scoreboard width.
 
 	// player lists
 	vgui::SectionedListPanel *m_pPlayerListT;
@@ -60,6 +63,9 @@ private:
 	vgui::Label	*m_pPlayerCountLabel_CT;
 	vgui::Label	*m_pScoreLabel_CT;
 	vgui::Label	*m_pPingLabel_CT;
+
+	CPanelAnimationVarAliasType( int, m_iStatusWidth, "status_width", "35", "proportional_int" );
+	CPanelAnimationVarAliasType( int, m_iFragsWidth, "frags_width", "30", "proportional_int" );
 };
 
 

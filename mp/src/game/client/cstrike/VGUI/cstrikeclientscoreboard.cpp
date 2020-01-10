@@ -19,6 +19,7 @@
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
 #include <vgui/IVgui.h>
+#include <vgui_controls/ImageList.h>
 #include <vgui_controls/SectionedListPanel.h>
 
 #include "voice_status.h"
@@ -82,13 +83,27 @@ void CCSClientScoreBoardDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
-	LoadControlSettings( "Resource/UI/scoreboard.res" );
+	LoadControlSettings( "Resource/UI/ScoreBoard.res" );
 
 	m_bgColor = GetSchemeColor( "SectionedListPanel.BgColor", GetBgColor(), pScheme );
 	m_borderColor = pScheme->GetColor( "FgColor", Color( 0, 0, 0, 0 ) );
 
 	SetBgColor( Color( 0, 0, 0, 0 ) );
 	SetBorder( pScheme->GetBorder( "BaseBorder" ) );
+
+	if ( m_pImageList )
+	{
+		m_iImageDead = m_pImageList->AddImage( scheme()->GetImage( "../hud/leaderboard_dead", true ) );
+		m_iImageBomb = m_pImageList->AddImage( scheme()->GetImage( "../hud/scoreboard_bomb", true ) );
+		m_iImageVIP = m_pImageList->AddImage(scheme()->GetImage( "../hud/win_panel_mvpstar", true ) );
+
+		// resize the images to our resolution
+		for (int i = 1; i < m_pImageList->GetImageCount(); i++ )
+		{
+			int wide = 13, tall = 13;
+			m_pImageList->GetImage(i)->SetSize(scheme()->GetProportionalScaledValueEx( GetScheme(), wide ), scheme()->GetProportionalScaledValueEx( GetScheme(),tall ) );
+		}
+	}
 
 	if ( m_pPlayerListT )
 	{
@@ -186,17 +201,18 @@ void CCSClientScoreBoardDialog::InitPlayerList( SectionedListPanel *pPlayerList,
 
 	// set the section to have the team color
 	if ( teamNumber && GameResources() )
-	{
 		pPlayerList->SetSectionFgColor( 0, GameResources()->GetTeamColor( teamNumber ) );
-	}
 
-	// Avatars are always displayed at 32x32 regardless of resolution
-	pPlayerList->AddColumnToSection( 0, "avatar", "", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iAvatarWidth );
-	pPlayerList->AddColumnToSection( 0, "name", "", 0, m_iNameWidth );
-	pPlayerList->AddColumnToSection( 0, "class", "" , 0, m_iClassWidth );
-	pPlayerList->AddColumnToSection( 0, "frags", "", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
-	pPlayerList->AddColumnToSection( 0, "deaths", "", SectionedListPanel::COLUMN_RIGHT, m_iDeathWidth );
-	pPlayerList->AddColumnToSection( 0, "ping", "", SectionedListPanel::COLUMN_RIGHT, m_iPingWidth );
+	if ( ShowAvatars() )
+		pPlayerList->AddColumnToSection( 0, "avatar",	"", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_CENTER, m_iAvatarWidth );
+
+	pPlayerList->AddColumnToSection( 0, "name",		"", 0, m_iNameWidth );
+	pPlayerList->AddColumnToSection( 0, "status",	"", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::COLUMN_RIGHT, m_iStatusWidth );
+	pPlayerList->AddColumnToSection( 0, "class",	"", 0, m_iClassWidth );
+	pPlayerList->AddColumnToSection( 0, "score",	"", SectionedListPanel::COLUMN_RIGHT, m_iScoreWidth );
+	pPlayerList->AddColumnToSection( 0, "frags",	"", SectionedListPanel::COLUMN_RIGHT, m_iFragsWidth );
+	pPlayerList->AddColumnToSection( 0, "deaths",	"", SectionedListPanel::COLUMN_RIGHT, m_iDeathWidth );
+	pPlayerList->AddColumnToSection( 0, "ping",		"", SectionedListPanel::COLUMN_RIGHT, m_iPingWidth );
 }
 
 //-----------------------------------------------------------------------------
@@ -477,7 +493,19 @@ bool CCSClientScoreBoardDialog::GetPlayerScoreInfo( int playerIndex, KeyValues *
 			 ( me->GetTeamNumber() == TEAM_SPECTATOR ) || // we are a spectator
 			 ( me->IsPlayerDead() ) ||					  // we are dead
 			 ( me->GetTeamNumber() == g_PR->GetTeam( playerIndex ) ); // we're on the same team
-	
+
+
+	// status
+	// display whether player is alive or dead (all players see this for all other players on both teams)	
+	if ( !g_PR->IsAlive( playerIndex ) && g_PR->GetTeam( playerIndex ) > TEAM_SPECTATOR )
+		kv->SetInt( "status", g_PR->IsAlive( playerIndex ) ?  0 : m_iImageDead );
+
+	if ( cs_PR->HasC4( playerIndex ) &&  bShowExtraInfo )
+		kv->SetInt( "class", cs_PR->HasC4( playerIndex ) ?  0 : m_iImageBomb );
+
+	if ( cs_PR->IsVIP( playerIndex ) &&  bShowExtraInfo )
+		kv->SetInt( "class", cs_PR->IsVIP( playerIndex ) ?  0 : m_iImageVIP );
+
 	if ( g_PR->IsHLTV( playerIndex ) )
 	{
 		// show #spectators in class field, it's transmitted as player's score
@@ -485,18 +513,7 @@ bool CCSClientScoreBoardDialog::GetPlayerScoreInfo( int playerIndex, KeyValues *
 		Q_snprintf( numspecs, sizeof( numspecs ), "%i Spectators", m_HLTVSpectators );
 		kv->SetString( "class", numspecs );
 	}
-	else if ( !g_PR->IsAlive( playerIndex ) && g_PR->GetTeam( playerIndex ) > TEAM_SPECTATOR )
-	{
-		kv->SetString( "class", "#Cstrike_DEAD" );
-	}
-	else if ( cs_PR->HasC4( playerIndex ) &&  bShowExtraInfo )
-	{
-		kv->SetString( "class", "#Cstrike_BOMB" );
-	}
-	else if ( cs_PR->IsVIP( playerIndex ) &&  bShowExtraInfo )
-	{
-		kv->SetString( "class", "#Cstrike_VIP" );
-	}
+
 	
 	return true;
 }
