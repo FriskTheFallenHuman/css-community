@@ -65,6 +65,28 @@ const float CycleLatchTolerance = 0.15;	// amount we can diverge from the server
 extern ConVar mp_playerid_delay;
 extern ConVar mp_playerid_hold;
 
+vgui::IImage* GetDefaultAvatarImage( C_BasePlayer *pPlayer )
+{
+	if ( pPlayer )
+	{
+		switch ( pPlayer->GetTeamNumber() )
+		{
+			case TEAM_TERRORIST:
+			{
+				static vgui::IImage *pTerAvatar = vgui::scheme()->GetImage( "../vgui/avatar_default-t_64", true );
+				return pTerAvatar;
+			}
+			case TEAM_CT:
+			{
+				static vgui::IImage *pCTAvatar = vgui::scheme()->GetImage( "../vgui/avatar_default_64", true );
+				return pCTAvatar;
+			}
+		}
+	}
+
+	return NULL;
+}
+
 class CAddonInfo
 {
 public:
@@ -227,7 +249,7 @@ void C_CSRagdoll::Interp_Copy( C_BaseAnimatingOverlay *pSourceEntity )
 	
 	VarMapping_t *pSrc = pSourceEntity->GetVarMapping();
 	VarMapping_t *pDest = GetVarMapping();
-    	
+		
 	// Find all the VarMapEntry_t's that represent the same variable.
 	for ( int i = 0; i < pDest->m_Entries.Count(); i++ )
 	{
@@ -674,6 +696,7 @@ END_RECV_TABLE()
 
 
 IMPLEMENT_CLIENTCLASS_DT( C_CSPlayer, DT_CSPlayer, CCSPlayer )
+	RecvPropDataTable( RECVINFO_DT( m_Shared ), 0, &REFERENCE_RECV_TABLE( DT_CSPlayerShared ) ),
 	RecvPropDataTable( "cslocaldata", 0, 0, &REFERENCE_RECV_TABLE(DT_CSLocalPlayerExclusive) ),
 	RecvPropDataTable( "csnonlocaldata", 0, 0, &REFERENCE_RECV_TABLE(DT_CSNonLocalPlayerExclusive) ),
 	RecvPropInt( RECVINFO( m_iAddonBits ) ),
@@ -716,6 +739,7 @@ C_CSPlayer::C_CSPlayer() :
 	m_iv_angEyeAngles( "C_CSPlayer::m_iv_angEyeAngles" )
 {
 	m_PlayerAnimState = CreatePlayerAnimState( this, this, LEGANIM_9WAY, true );
+	m_Shared.Init( this );
 
 	m_angEyeAngles.Init();
 

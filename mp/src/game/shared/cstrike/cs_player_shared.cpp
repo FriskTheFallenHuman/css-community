@@ -5,7 +5,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "weapon_csbase.h"
+#include "cs_player_shared.h"
 #include "decals.h"
 #include "cs_gamerules.h"
 #include "weapon_c4.h"
@@ -72,7 +72,95 @@ ConVar mp_weapon_g3sg1_price( "mp_weapon_g3sg1_price", "5000", FCVAR_REPLICATED 
 //Machineguns
 ConVar mp_weapon_m249_price( "mp_weapon_m249_price", "5750", FCVAR_REPLICATED | FCVAR_UNLOGGED | FCVAR_PRINTABLEONLY );
 
+//=============================================================================
+//
+// Tables.
+//
 
+#ifdef CLIENT_DLL
+BEGIN_RECV_TABLE_NOBASE( CCSPlayerShared, DT_CSPlayerSharedLocal )
+END_RECV_TABLE()
+
+BEGIN_RECV_TABLE_NOBASE( CCSPlayerShared, DT_CSPlayerShared )
+	// Local Data.
+	RecvPropDataTable( "cssharedlocaldata", 0, 0, &REFERENCE_RECV_TABLE( DT_CSPlayerSharedLocal ) ),
+END_RECV_TABLE()
+
+BEGIN_PREDICTION_DATA_NO_BASE( CCSPlayerShared )
+END_PREDICTION_DATA()
+
+#else
+BEGIN_SEND_TABLE_NOBASE( CCSPlayerShared, DT_CSPlayerSharedLocal )
+END_SEND_TABLE()
+
+BEGIN_SEND_TABLE_NOBASE( CCSPlayerShared, DT_CSPlayerShared )
+	// Local Data.
+	SendPropDataTable( "cssharedlocaldata", 0, &REFERENCE_SEND_TABLE( DT_CSPlayerSharedLocal ), SendProxy_SendLocalDataTable ),	
+END_SEND_TABLE()
+#endif
+
+// --------------------------------------------------------------------------------------------------- //
+// CCSPlayerShared implementation.
+// --------------------------------------------------------------------------------------------------- //
+CCSPlayerShared::CCSPlayerShared()
+{
+}
+
+void CCSPlayerShared::Init( OuterClass* pPlayer )
+{
+	m_pOuter = pPlayer;
+}
+
+CWeaponCSBase* CCSPlayerShared::GetActiveCSWeapon() const
+{
+	CBaseCombatWeapon *pWeapon = m_pOuter->GetActiveWeapon();
+	if ( pWeapon )
+	{
+		Assert( dynamic_cast< CWeaponCSBase* >( pWeapon ) == static_cast< CWeaponCSBase* >( pWeapon ) );
+		return static_cast< CWeaponCSBase* >( pWeapon );
+	}
+	else
+		return NULL;
+}
+
+bool CCSPlayerShared::IsDucking( void ) const
+{
+	return ( m_pOuter->GetFlags() & FL_DUCKING ) ? true : false;
+}
+
+bool CCSPlayerShared::IsOnGround() const
+{
+	return ( m_pOuter->GetFlags() & FL_ONGROUND ) ? true : false;
+}
+
+bool CCSPlayerShared::IsOnGodMode() const
+{
+	return ( m_pOuter->GetFlags() & FL_GODMODE ) ? true : false;
+}
+
+int CCSPlayerShared::GetButtons()
+{
+	return m_pOuter->m_nButtons;
+}
+
+bool CCSPlayerShared::IsButtonPressing( int btn )
+{
+	return ( ( m_pOuter->m_nButtons & btn ) ) ? true : false;
+}
+
+bool CCSPlayerShared::IsButtonPressed( int btn )
+{
+	return ( ( m_pOuter->m_afButtonPressed & btn ) ) ? true : false;
+}
+
+bool CCSPlayerShared::IsButtonReleased( int btn )
+{
+	return ( ( m_pOuter->m_afButtonReleased & btn ) ) ? true : false;
+}
+
+// --------------------------------------------------------------------------------------------------- //
+// CSDKPlayer shared implementations.
+// --------------------------------------------------------------------------------------------------- //
 #ifdef _DEBUG
 
 	// This is some extra code to collect weapon accuracy stats:
@@ -344,7 +432,7 @@ void CCSPlayer::FireBullet(
 
 	// add the spray 
 	Vector vecDir = vecDirShooting +
-	      x * vecSpread * vecRight +
+		  x * vecSpread * vecRight +
 		  y * vecSpread * vecUp;
 
 	VectorNormalize( vecDir );
@@ -502,7 +590,7 @@ void CCSPlayer::FireBullet(
 				if( waterTrace.allsolid != 1 )
 				{
 					CEffectData	data;
- 					data.m_vOrigin = waterTrace.endpos;
+					data.m_vOrigin = waterTrace.endpos;
 					data.m_vNormal = waterTrace.plane.normal;
 					data.m_flScale = random->RandomFloat( 8, 12 );
 

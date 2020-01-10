@@ -16,8 +16,7 @@
 #include "cs_shareddefs.h"
 #include "cs_autobuy.h"
 #include "utldict.h"
-
-
+#include "cs_player_shared.h"
 
 class CWeaponCSBase;
 class CMenu;
@@ -300,6 +299,7 @@ public:
 	virtual void StopReplayMode();
 	virtual void PlayUseDenySound();
 
+	CNetworkVarEmbedded( CCSPlayerShared, m_Shared );
 
 public:
 

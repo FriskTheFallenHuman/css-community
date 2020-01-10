@@ -14,6 +14,7 @@
 #include "cs_playeranimstate.h"
 #include "c_baseplayer.h"
 #include "cs_shareddefs.h"
+#include "cs_player_shared.h"
 #include "weapon_csbase.h"
 #include "baseparticleentity.h"
 #include "beamdraw.h"
@@ -185,6 +186,8 @@ public:
 
 	// Returns true if the player is allowed to move.
 	bool CanMove() const;
+
+	CCSPlayerShared m_Shared;
 
 	bool HasC4() const;	// Is this player carrying a C4 bomb?
 	bool IsVIP() const;	// Is this player the VIP?

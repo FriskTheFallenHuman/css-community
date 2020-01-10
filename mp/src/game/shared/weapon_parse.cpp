@@ -283,7 +283,11 @@ bool ReadWeaponDataFromFileForSlot( IFileSystem* filesystem, const char *szWeapo
 		return true;
 
 	char sz[128];
+#ifdef CSTRIKE_DLL
+	Q_snprintf( sz, sizeof( sz ), "scripts/weapons/%s", szWeaponName );
+#else
 	Q_snprintf( sz, sizeof( sz ), "scripts/%s", szWeaponName );
+#endif
 
 	KeyValues *pKV = ReadEncryptedKVFile( filesystem, sz, pICEKey,
 #if defined( DOD_DLL )

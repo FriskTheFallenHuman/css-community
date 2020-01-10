@@ -15,12 +15,15 @@
 #include "ai_hull.h"
 #include "ndebugoverlay.h"
 #include "weapon_csbase.h"
+#include "effect_dispatch_data.h"
+#include "te_effect_dispatch.h"
 #include "decals.h"
 #include "cs_ammodef.h"
 #include "IEffects.h"
 #include "cs_client.h"
 #include "client.h"
 #include "cs_shareddefs.h"
+#include "particle_parse.h"
 #include "shake.h"
 #include "team.h"
 #include "weapon_c4.h"
@@ -235,7 +238,7 @@ PRECACHE_REGISTER(player);
 
 BEGIN_SEND_TABLE_NOBASE( CCSPlayer, DT_CSLocalPlayerExclusive )
 	SendPropFloat( SENDINFO( m_flStamina ), 14, 0, 0, 1400  ),
-    SendPropInt( SENDINFO( m_iDirection ), 1, SPROP_UNSIGNED ),
+	SendPropInt( SENDINFO( m_iDirection ), 1, SPROP_UNSIGNED ),
 	SendPropInt( SENDINFO( m_iShotsFired ), 8, SPROP_UNSIGNED ),
 	SendPropFloat( SENDINFO( m_flVelocityModifier ), 8, 0, 0, 1  ),
 
@@ -266,6 +269,9 @@ IMPLEMENT_SERVERCLASS_ST( CCSPlayer, DT_CSPlayer )
 
 	// We need to send a hi-res origin to the local player to avoid prediction errors sliding along walls
 	SendPropExclude( "DT_BaseEntity", "m_vecOrigin" ),
+
+	// Data that only gets sent to the local player.
+	SendPropDataTable( SENDINFO_DT( m_Shared ), &REFERENCE_SEND_TABLE( DT_CSPlayerShared ) ),
 
 	// Data that only gets sent to the local player.
 	SendPropDataTable( "cslocaldata", 0, &REFERENCE_SEND_TABLE(DT_CSLocalPlayerExclusive), SendProxy_SendLocalDataTable ),
@@ -344,6 +350,7 @@ ConCommand cc_CreatePredictionError( "CreatePredictionError", cc_CreatePredictio
 CCSPlayer::CCSPlayer()
 {
 	m_PlayerAnimState = CreatePlayerAnimState( this, this, LEGANIM_9WAY, true );
+	m_Shared.Init( this );
 
 	UseClientSideAnimation();
 
@@ -1008,7 +1015,7 @@ void CCSPlayer::InitVCollision( const Vector &vecAbsOrigin, const Vector &vecAbs
 {
 	BaseClass::InitVCollision( vecAbsOrigin, vecAbsVelocity );
 
-    if ( sv_turbophysics.GetBool() )
+	if ( sv_turbophysics.GetBool() )
 		return;
 
 	// Setup the HL2 specific callback.
@@ -1318,7 +1325,7 @@ void CCSPlayer::PostThink()
 	// Store the eye angles pitch so the client can compute its animation state correctly.
 	m_angEyeAngles = EyeAngles();
 
-    m_PlayerAnimState->Update( m_angEyeAngles[YAW], m_angEyeAngles[PITCH] );
+	m_PlayerAnimState->Update( m_angEyeAngles[YAW], m_angEyeAngles[PITCH] );
 
 	// check if we need to apply a deafness DSP effect.
 	if ((m_applyDeafnessTime != 0.0f) && (m_applyDeafnessTime <= gpGlobals->curtime))
@@ -1585,7 +1592,7 @@ int CCSPlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 				m_bHasHelmet = false;
 
 			if( !(info.GetDamageType() & DMG_FALL) )
- 				Pain( true /*has armor*/ );
+				Pain( true /*has armor*/ );
 		}
 		else
 		{
@@ -1676,7 +1683,7 @@ void CCSPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 
 	// show blood for firendly fire only if FF is on
 	if ( pAttacker && ( GetTeamNumber() == pAttacker->GetTeamNumber() ) )
-	 	 bShouldBleed = CSGameRules()->IsFriendlyFireOn();
+		 bShouldBleed = CSGameRules()->IsFriendlyFireOn();
 
 	if ( m_takedamage != DAMAGE_YES )
 		return;
@@ -1805,8 +1812,11 @@ void CCSPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 
 	if ( bShouldBleed )
 	{
-		// This does smaller splotches on the guy and splats blood on the world.
-		TraceBleed( flDamage, vecDir, ptr, info.GetDamageType() );
+		if( !bShouldSpark && ptr->hitgroup != HITGROUP_HEAD )
+		{
+		    // This does smaller splotches on the guy and splats blood on the world.
+		    TraceBleed( flDamage, vecDir, ptr, info.GetDamageType() );
+		}
 
 		CEffectData	data;
 		data.m_vOrigin = ptr->endpos;
@@ -1822,7 +1832,10 @@ void CCSPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 		if ( ptr->hitgroup == HITGROUP_HEAD && bShouldSpark )
 			data.m_flMagnitude *= 0.5;
 
-		DispatchEffect( "csblood", data );
+		if( !bShouldSpark && ptr->hitgroup != HITGROUP_HEAD )
+		{
+		    DispatchEffect( "csblood", data );
+		}
 	}
 	if ( ( ptr->hitgroup == HITGROUP_HEAD || bHitShield ) && bShouldSpark ) // they hit a helmet
 	{
@@ -1836,13 +1849,21 @@ void CCSPlayer::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, 
 
 		subInfo.SetDamage( flDamage );
 
-		if( bHeadShot )
+		Vector vecBlood = (ptr->endpos - GetAbsOrigin() );
+		VectorNormalize( vecBlood );
+		int iVelocity = 1.0f;
+
+		if( bHeadShot && !m_bHasHelmet )
+		{
 			subInfo.AddDamageType( DMG_HEADSHOT );
+
+		    // show blood stream effect
+		    UTIL_BloodStream( ptr->endpos, ptr->plane.normal, BLOOD_COLOR_RED, iVelocity + random->RandomFloat( 0, 100 ) );
+		}
 
 		AddMultiDamage( subInfo, this );
 	}
 }
-
 
 void CCSPlayer::Reset()
 {
@@ -2771,7 +2792,7 @@ BuyResult_e CCSPlayer::AttemptToBuyShield( void )
 			CWeaponCSBase *pCSWeapon = dynamic_cast< CWeaponCSBase* >( pWeapon );
 
 			if ( pCSWeapon && pCSWeapon->GetCSWpnData().m_bCanUseWithShield == false )
-			 	 return;
+				 return;
 		}
 
 		if ( HasPrimaryWeapon() )
@@ -4943,7 +4964,7 @@ void CCSPlayer::State_Enter_ACTIVE()
 {
 	SetMoveType( MOVETYPE_WALK );
 	RemoveSolidFlags( FSOLID_NOT_SOLID );
-    m_Local.m_iHideHUD = 0;
+	m_Local.m_iHideHUD = 0;
 	PhysObjectWake();
 }
 

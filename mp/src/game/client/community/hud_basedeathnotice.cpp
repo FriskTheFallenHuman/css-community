@@ -300,9 +300,6 @@ void CHudBaseDeathNotice::RetireExpiredDeathNotices()
 		if ( gpGlobals->curtime > m_DeathNotices[i].GetExpiryTime() )
 		{
 			m_DeathNotices.Remove(i);
-#ifdef COMMUNITY_CLIENT_DLL
-
-#endif
 		}
 	}
 
