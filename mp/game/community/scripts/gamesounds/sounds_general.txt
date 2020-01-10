@@ -217,6 +217,9 @@
 		"wave"	"player/death4.wav"
 		"wave"	"player/death5.wav"
 		"wave"	"player/death6.wav"
+		"wave"	"player/death7.wav"
+		"wave"	"player/death8.wav"
+		"wave"	"player/death9.wav"
 	}
 	
 }
