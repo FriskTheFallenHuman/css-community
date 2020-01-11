@@ -631,7 +631,7 @@ bool CCSGameMovement::CheckJumpButton( void )
 	}
 
 	// No more effect
- 	if (m_pCSPlayer->GetGroundEntity() == NULL)
+	if (m_pCSPlayer->GetGroundEntity() == NULL)
 	{
 		mv->m_nOldButtons |= IN_JUMP;
 		return false;		// in air, so no effect
@@ -762,7 +762,7 @@ bool CCSGameMovement::CanUnduck()
 	{
 		// If in air an letting go of croush, make sure we can offset origin to make
 		//  up for uncrouching
- 		Vector hullSizeNormal = VEC_HULL_MAX - VEC_HULL_MIN;
+		Vector hullSizeNormal = VEC_HULL_MAX - VEC_HULL_MIN;
 		Vector hullSizeCrouch = VEC_DUCK_HULL_MAX - VEC_DUCK_HULL_MIN;
 
 		newOrigin += -0.5f * ( hullSizeNormal - hullSizeCrouch );
@@ -794,7 +794,7 @@ void CCSGameMovement::FinishUnDuck( void )
 	{
 		// If in air an letting go of croush, make sure we can offset origin to make
 		//  up for uncrouching
- 		Vector hullSizeNormal = VEC_HULL_MAX - VEC_HULL_MIN;
+		Vector hullSizeNormal = VEC_HULL_MAX - VEC_HULL_MIN;
 		Vector hullSizeCrouch = VEC_DUCK_HULL_MAX - VEC_DUCK_HULL_MIN;
 
 		Vector viewDelta = -0.5f * ( hullSizeNormal - hullSizeCrouch );
@@ -819,32 +819,30 @@ void CCSGameMovement::FinishUnDuck( void )
 //-----------------------------------------------------------------------------
 void CCSGameMovement::FinishDuck( void )
 {
-
-	Vector hullSizeNormal = VEC_HULL_MAX - VEC_HULL_MIN;
-	Vector hullSizeCrouch = VEC_DUCK_HULL_MAX - VEC_DUCK_HULL_MIN;
-
-	Vector viewDelta = 0.5f * ( hullSizeNormal - hullSizeCrouch );
-
-	player->SetViewOffset( GetPlayerViewOffset( true ) );
 	player->AddFlag( FL_DUCKING );
+	player->m_Local.m_bDucked = true;
 	player->m_Local.m_bDucking = false;
 
-	if ( !player->m_Local.m_bDucked )
+	player->SetViewOffset( GetPlayerViewOffset( true ) );
+
+	// HACKHACK - Fudge for collision bug - no time to fix this properly
+	if ( player->GetGroundEntity() )
 	{
-
-		Vector org = mv->GetAbsOrigin();
-
-		if ( player->GetGroundEntity() != NULL )
+		for ( int i = 0; i < 3; i++ )
 		{
-			org -= VEC_DUCK_HULL_MIN - VEC_HULL_MIN;
+			Vector org = mv->GetAbsOrigin();
+			org[ i ]-= ( VEC_DUCK_HULL_MIN_SCALED( player )[i] - VEC_HULL_MIN_SCALED( player )[i] );
+			mv->SetAbsOrigin( org );
 		}
-		else
-		{
-			org += viewDelta;
-		}
-		mv->SetAbsOrigin( org );
-
-		player->m_Local.m_bDucked = true;
+	}
+	else
+	{
+		Vector hullSizeNormal = VEC_HULL_MAX_SCALED( player ) - VEC_HULL_MIN_SCALED( player );
+		Vector hullSizeCrouch = VEC_DUCK_HULL_MAX_SCALED( player ) - VEC_DUCK_HULL_MIN_SCALED( player );
+		Vector viewDelta = ( hullSizeNormal - hullSizeCrouch );
+		Vector out;
+		VectorAdd( mv->GetAbsOrigin(), viewDelta, out );
+		mv->SetAbsOrigin( out );
 	}
 
 	// See if we are stuck?
