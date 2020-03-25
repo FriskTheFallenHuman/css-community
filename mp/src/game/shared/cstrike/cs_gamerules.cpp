@@ -4148,16 +4148,18 @@ CAmmoDef* GetAmmoDef()
 		ammoDef.AddAmmoType( AMMO_TYPE_FLASHBANG,		0,			TRACER_LINE, 0,	0,	2/*max carry*/, 1, 0 );
 		ammoDef.AddAmmoType( AMMO_TYPE_SMOKEGRENADE,	0,			TRACER_LINE, 0, 0,	1/*max carry*/, 1, 0 );
 
-		ammoDef.AddAmmoCost( BULLET_PLAYER_50AE,		40,		7  );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_762MM,		80,		30 );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_556MM,		60,		30 );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_556MM_BOX,	60,		30 );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_338MAG,		125,	10 );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_9MM,			20,		30 );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_BUCKSHOT,	65,		8  );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_45ACP,		25,		25 );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_357SIG,		50,		13 );
-		ammoDef.AddAmmoCost( BULLET_PLAYER_57MM,		50,		50 );
+		//Adrian: I set all the prices to 0 just so the rest of the buy code works
+		//This should be revisited.
+		ammoDef.AddAmmoCost( BULLET_PLAYER_50AE, 0, 7 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_762MM, 0, 30 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_556MM, 0, 30 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_556MM_BOX, 0, 30 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_338MAG, 0, 10 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_9MM, 0, 30 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_BUCKSHOT, 0, 8 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_45ACP, 0, 25 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_357SIG, 0, 13 );
+		ammoDef.AddAmmoCost( BULLET_PLAYER_57MM, 0, 50 );
 	}
 
 	return &ammoDef;
