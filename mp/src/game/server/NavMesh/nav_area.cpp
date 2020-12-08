@@ -4633,6 +4633,11 @@ bool CNavArea::IsBlocked( int teamID, bool ignoreNavBlockers ) const
 	{
 		return false;
 	}
+	else if ( ( m_attributeFlags & NAV_MESH_TRANSIENT ) == false )
+	{
+		// This fixes bot pathfinding, only blocks areas that need to be checked! - Reece (06/12/20)
+		return false;
+	}
 
 #ifdef TERROR
 	if ( ( teamID == TEAM_SURVIVOR ) && ( m_attributeFlags & CNavArea::NAV_PLAYERCLIP ) )
