@@ -1,4 +1,4 @@
-# Counter Strike Source: Community Edition
+# Counter Strike Source: Base Edition
 
 **Counter Strike Source: Base Edition** is open source port of the leaked 2007 Source engine leak of the award winner Counter Strike Source. 
 
