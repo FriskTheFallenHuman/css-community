@@ -11,7 +11,16 @@ Currently this mod is in a pre-alpha state so don’t expected any class of bugs
 
 1. Download and install [Visual Studio 2013](https://go.microsoft.com/fwlink/?LinkId=532495&clcid=0x409).
 2. Download and install the [Multibyte MFC Library](https://www.microsoft.com/en-gb/download/details.aspx?id=40770).
-3. Run first `creategameprojects.bat` and build it this contains the mod dll need to run the mod.
+3. Run `mp\src\creategameprojects.bat`, which will create `mp\src\Game-COMMUNITY.sln`.
+4. Build the solution to create the mod dll, which is needed to run the mod.
+
+
+## :running: Running
+
+1. In Steam, install `Counter-Strike: Source` and `Source SDK Base 2013 Multiplayer`.
+2. Follow the steps above to build the project.
+3. Copy `mp\src\thirdparty\fmod\lib\fmod.dll` to `mp\game\community\bin\fmod.dll`.
+4. Run `mp\game\community\run_mod.bat`.
 
 ## :clipboard: Goals
 
